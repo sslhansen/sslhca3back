@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,6 +38,9 @@ public class User implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Fish fish;
+
     public List<String> getRolesAsStrings() {
         if (roleList.isEmpty()) {
             return null;
@@ -59,6 +64,18 @@ public class User implements Serializable {
         this.userName = userName;
 
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt(12));
+    }
+
+    public void addFish(Fish fish) {
+        this.fish = fish;
+    }
+
+    public Fish getFish() {
+        return fish;
+    }
+
+    public void setFish(Fish fish) {
+        this.fish = fish;
     }
 
     public String getUserName() {

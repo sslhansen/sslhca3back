@@ -220,6 +220,7 @@ public class LoginEndpointTest {
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
     }
+    @Disabled
     @Test
     public void externAccess() {
         login("user_admin", "test");

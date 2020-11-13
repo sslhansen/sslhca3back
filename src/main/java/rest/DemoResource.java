@@ -6,6 +6,7 @@ import dtos.BoredDTO;
 import dtos.FoodDTO;
 import dtos.CombinedDTO;
 import dtos.KanyeDTO;
+import dtos.NbaDTO;
 import dtos.QuoteDTO;
 import dtos.RandomDogDTO;
 import entities.User;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import utils.EMF_Creator;
@@ -81,30 +83,38 @@ public class DemoResource {
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
 
-    
+//    @GET
+//    @Path("extern")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public String getJokes() throws IOException {
+//        String randomDog = HttpUtils.fetchData("https://dog.ceo/api/breeds/image/random");
+//        RandomDogDTO randomDogDTO = gson.fromJson(randomDog, RandomDogDTO.class);
+//
+//        String randomQuote = HttpUtils.fetchData("https://programming-quotes-api.herokuapp.com/quotes/random");
+//        QuoteDTO randomQuoteDTO = gson.fromJson(randomQuote, QuoteDTO.class);
+//        
+//        String food = HttpUtils.fetchData("https://foodish-api.herokuapp.com/api");
+//        FoodDTO breakingBadDTO = gson.fromJson(food, FoodDTO.class);
+//        
+//        String bored = HttpUtils.fetchData("https://www.boredapi.com/api/activity");
+//        BoredDTO boredDTO = gson.fromJson(bored, BoredDTO.class);
+//        
+//        String kanye = HttpUtils.fetchData("https://api.kanye.rest/");
+//        KanyeDTO kanyeDTO = gson.fromJson(kanye, KanyeDTO.class);
+//        
+//        CombinedDTO combined = new CombinedDTO(boredDTO, breakingBadDTO, kanyeDTO, randomQuoteDTO, randomDogDTO);
+//        
+//        String json = GSON.toJson(combined);
+//        return json;
+//    }
     @GET
-    @Path("extern")
+    @Path("nbainfo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJokes() throws IOException {
-        String randomDog = HttpUtils.fetchData("https://dog.ceo/api/breeds/image/random");
-        RandomDogDTO randomDogDTO = gson.fromJson(randomDog, RandomDogDTO.class);
-
-        String randomQuote = HttpUtils.fetchData("https://programming-quotes-api.herokuapp.com/quotes/random");
-        QuoteDTO randomQuoteDTO = gson.fromJson(randomQuote, QuoteDTO.class);
-        
-        String food = HttpUtils.fetchData("https://foodish-api.herokuapp.com/api");
-        FoodDTO breakingBadDTO = gson.fromJson(food, FoodDTO.class);
-        
-        String bored = HttpUtils.fetchData("https://www.boredapi.com/api/activity");
-        BoredDTO boredDTO = gson.fromJson(bored, BoredDTO.class);
-        
-        String kanye = HttpUtils.fetchData("https://api.kanye.rest/");
-        KanyeDTO kanyeDTO = gson.fromJson(kanye, KanyeDTO.class);
-        
-        CombinedDTO combined = new CombinedDTO(boredDTO, breakingBadDTO, kanyeDTO, randomQuoteDTO, randomDogDTO);
-        
-        String json = GSON.toJson(combined);
-        return json;
+    @RolesAllowed("user")
+    public String getExternNbaInfo(@PathParam("id") String id) throws IOException {
+        String nbaInfo = HttpUtils.fetchData("https://www.balldontlie.io/api/v1/teams/" + id);
+        NbaDTO nbaDTO = gson.fromJson(nbaInfo, NbaDTO.class);
+        return GSON.toJson(nbaDTO);
     }
 
 }
